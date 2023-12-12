@@ -41,6 +41,11 @@ scrape_configs:
         labels:
           chain: 'injective-1'
 
+  - job_name: 'peggo'
+    metrics_path: '/'
+    static_configs:
+      - targets: ['tenderduty:28686']
+
 alerting:
   alertmanagers:
   - scheme: http
