@@ -41,7 +41,7 @@ scrape_configs:
         labels:
           chain: 'injective-1'
 
-  - job_name: 'peggo'
+  - job_name: 'tenderduty'
     metrics_path: '/'
     static_configs:
       - targets: ['tenderduty:28686']
