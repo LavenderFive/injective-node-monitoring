@@ -5,6 +5,7 @@ networks:
     driver: bridge
 
 volumes:
+    tenderduty:
     prometheus_data: {}
     grafana_data: {}
     caddy_data: {}
@@ -119,13 +120,17 @@ services:
   grafana:
     image: grafana/grafana:9.0.5
     env_file:
-      - config
+      - '.env'
     container_name: grafana
     volumes:
       - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
       - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
-      - grafana-storage:/var/lib/grafana
+      # - grafana-storage:/var/lib/grafana
     restart: unless-stopped
+    environment:
+      - GF_SECURITY_ADMIN_USER=${ADMIN_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
+      - GF_INSTALL_PLUGINS=${GF_INSTALL_PLUGINS}
     expose:
       - 3000
     networks:
@@ -172,6 +177,8 @@ services:
     image: lavender5/peggo_prometheus_exporter:master
     container_name: peggo_exporter
     restart: unless-stopped
+    env_file:
+      - '.env'
     environment:
       - HTTP_PORT=${HTTP_PORT}
       - ORCHESTRATOR_ADDRESS=${ORCHESTRATOR_ADDRESS}
@@ -179,5 +186,26 @@ services:
       - NODE_URL=${NODE_URL}
     ports:
       - "9910:9910"
+    networks:
+      - monitor-net
+
+  tenderduty:
+    image: lavender5/tenderduty:latest
+    container_name: tenderduty
+    restart: unless-stopped
+    expose:
+      - 8888   # Dashboard
+    volumes:
+      - 'tenderduty:/var/lib/tenderduty'
+      - './tenderduty/config.yml:/var/lib/tenderduty/config.yml'
+      - './tenderduty/chains.d:/var/lib/tenderduty/chains.d'
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "10"
+    ports:
+      - "8888:8888"
+      - "28686:28686"
     networks:
       - monitor-net
