@@ -194,7 +194,8 @@ services:
     container_name: tenderduty
     restart: unless-stopped
     expose:
-      - 8888   # Dashboard
+      - 8888    # Dashboard
+      - 28686   # Prometheus exporter
     volumes:
       - 'tenderduty:/var/lib/tenderduty'
       - './tenderduty/config.yml:/var/lib/tenderduty/config.yml'
