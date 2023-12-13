@@ -67,8 +67,6 @@ To support persistent storage, you'll first need to create the volume:
 ```
 docker volume create grafana-storage
 ```
-#### 2. Prometheus Jobs
-Add your node endpoints under [/prometheus/prometheus.yaml](https://github.com/LavenderFive/aptos-monitoring/blob/master/prometheus/prometheus.yml#L46). 
 
 ---
 
@@ -104,7 +102,7 @@ Grafana is preconfigured with dashboards and Prometheus as the default data sour
 
 ***Monitor Services Dashboard***
 
-![Monitor Services](https://raw.githubusercontent.com/LavenderFive/aptos-monitoring/master/screens/Grafana_Prometheus.png)
+![Monitor Services](https://raw.githubusercontent.com/LavenderFive/injective-node-monitoring/master/screens/Grafana_Prometheus.png)
 
 The Monitor Services Dashboard shows key metrics for monitoring the containers that make up the monitoring stack:
 
@@ -119,10 +117,10 @@ The Monitor Services Dashboard shows key metrics for monitoring the containers t
 
 ## Define alerts
 
-Two alert groups have been setup within the [alert.rules](https://github.com/LavenderFive/aptos-monitoring/blob/master/prometheus/alert.rules) configuration file:
+Two alert groups have been setup within the [alert.rules](https://github.com/LavenderFive/injective-node-monitoring/blob/master/prometheus/alert.rules) configuration file:
 
-* Monitoring services alerts [targets](https://github.com/LavenderFive/aptos-monitoring/blob/master/prometheus/alert.rules#L13-L22)
-* Aptos alerts [aptos](https://github.com/LavenderFive/aptos-monitoring/blob/master/prometheus/alert.rules#L2-L11)
+* Monitoring services alerts [targets](https://github.com/LavenderFive/injective-node-monitoring/blob/master/prometheus/alert.rules#L13-L22)
+* Peggo alerts [peggo](https://github.com/LavenderFive/injective-node-monitoring/blob/master/prometheus/alert.rules#L2-L11)
 
 You can modify the alert rules and reload them by making a HTTP POST call to Prometheus:
 
@@ -171,7 +169,7 @@ A complete list of integrations can be found [here](https://prometheus.io/docs/a
 
 You can view and silence notifications by accessing `http://<host-ip>:9093`.
 
-The notification receivers can be configured in [alertmanager/config.yml](https://github.com/LavenderFive/aptos-monitoring/blob/master/alertmanager/config.yml) file.
+The notification receivers can be configured in [alertmanager/config.yml](https://github.com/LavenderFive/injective-node-monitoring/blob/master/alertmanager/config.yml) file.
 
 To receive alerts via Slack you need to make a custom integration by choose ***incoming web hooks*** in your Slack team app page.
 You can find more details on setting up Slack integration [here](http://www.robustperception.io/using-slack-with-the-alertmanager/).
@@ -192,4 +190,4 @@ receivers:
             api_url: 'https://hooks.slack.com/services/<webhook-id>'
 ```
 
-![Slack Notifications](https://raw.githubusercontent.com/LavenderFive/aptos-monitoring/master/screens/Slack_Notifications.png)
+![Slack Notifications](https://raw.githubusercontent.com/LavenderFive/injective-node-monitoring/master/screens/Slack_Notifications.png)
