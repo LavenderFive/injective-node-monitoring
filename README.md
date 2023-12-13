@@ -1,8 +1,10 @@
 # injective-node-monitoring
 
 A monitoring solution for Injective node runners and validators utilizing docker containers with [Prometheus](https://prometheus.io/), [Grafana](http://grafana.org/),
-[tenderduty](https://github.com/blockpane/tenderduty), [cAdvisor](https://github.com/google/cadvisor), [NodeExporter](https://github.com/prometheus/node_exporter), 
+[Tenderduty](https://github.com/blockpane/tenderduty), [cAdvisor](https://github.com/google/cadvisor), [NodeExporter](https://github.com/prometheus/node_exporter), 
 and alerting with [AlertManager](https://github.com/prometheus/alertmanager). 
+
+This is intended to be a single-stop solution for monitoring your Injectives validator signing state and Peggo signing state.
 
 ## Install
 
