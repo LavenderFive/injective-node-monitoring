@@ -49,6 +49,6 @@ tenderduty.YOUR_WEBSITE.COM {
     reverse_proxy tenderduty:8888
 }
 
-YOUR_WEBSITE.COM {
+grafana.YOUR_WEBSITE.COM {
     reverse_proxy grafana:3000
 }
