@@ -1,6 +1,6 @@
 # injective-node-monitoring
 
-A monitoring solution for Aptos nodes utilizing docker containers with [Prometheus](https://prometheus.io/), [Grafana](http://grafana.org/),
+A monitoring solution for Injective node runners and validators utilizing docker containers with [Prometheus](https://prometheus.io/), [Grafana](http://grafana.org/),
 [tenderduty](https://github.com/blockpane/tenderduty), [cAdvisor](https://github.com/google/cadvisor), [NodeExporter](https://github.com/prometheus/node_exporter), 
 and alerting with [AlertManager](https://github.com/prometheus/alertmanager). 
 
@@ -58,9 +58,9 @@ Containers:
 ## Setup Grafana
 
 ### Peggo Grafana Dashboard
-This monitoring solution comes built in with Rhinostake's Aptos Monitoring dashboard, and 
-will require all of its setup to work. Grafana, Prometheus, and Infinity are installed 
-automatically, but setting up the Prometheus jobs is still necessary. 
+This monitoring solution comes built in with a *very basic* Peggo Monitoring dashboard, 
+which works out of the box. Grafana, Prometheus, and Infinity are installed 
+automatically.
 
 #### 1. Create Persistent Storage
 To support persistent storage, you'll first need to create the volume:
