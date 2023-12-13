@@ -1,17 +1,16 @@
-# aptos-monitoring
+# injective-node-monitoring
 
-A monitoring solution for Aptos nodes utilizing docker containers with [Prometheus](https://prometheus.io/), [Grafana](http://grafana.org/), [cAdvisor](https://github.com/google/cadvisor),
-[NodeExporter](https://github.com/prometheus/node_exporter), and alerting with [AlertManager](https://github.com/prometheus/alertmanager). 
-
-**Thank you to the Rhino Stake team for their [excellent dashboard](https://github.com/RhinoStake/aptos_monitoring)!**
+A monitoring solution for Aptos nodes utilizing docker containers with [Prometheus](https://prometheus.io/), [Grafana](http://grafana.org/),
+[tenderduty](https://github.com/blockpane/tenderduty), [cAdvisor](https://github.com/google/cadvisor), [NodeExporter](https://github.com/prometheus/node_exporter), 
+and alerting with [AlertManager](https://github.com/prometheus/alertmanager). 
 
 ## Install
 
-Clone this repository on your Docker host, cd into aptos-monitoring directory and run compose up:
+Clone this repository on your Docker host, cd into injective-node-monitoring directory and run compose up:
 
 ```bash
-git clone https://github.com/LavenderFive/aptos-monitoring
-cd aptos-monitoring
+git clone https://github.com/LavenderFive/injective-node-monitoring
+cd injective-node-monitoring
 
 ADMIN_USER=admin ADMIN_PASSWORD=admin ADMIN_PASSWORD_HASH=JDJhJDE0JE91S1FrN0Z0VEsyWmhrQVpON1VzdHVLSDkyWHdsN0xNbEZYdnNIZm1pb2d1blg4Y09mL0ZP docker-compose up -d
 ```
@@ -34,12 +33,31 @@ Containers:
 * NodeExporter (host metrics collector)
 * cAdvisor (containers metrics collector)
 * Caddy (reverse proxy and basic auth provider for prometheus and alertmanager)
+* Tenderduty (Cosmos node monitoring solution)
+* Peggo Prometheus Exporter (Peggo monitoring solution)
+
+## TL;DR: Steps
+```
+1. cp .env.sample .env
+----- Peggo -----
+1. rename .env/ORCHESTRATOR_ADDRESS to your orchestrator
+1. under alertmanager/config.yml add your Pagerduty integration/service key
+-- IF YOU'RE JUST USING THIS FOR PEGGO, SKIP TO STEP 6! --
+----- Tenderduty -----
+1. under tenderduty/config.yml add your validator/endpoint information
+----- Caddy ------
+1. under caddy/Caddyfile:
+1. replace YOUR_WEBSITE.COM with your website
+1. replace YOUR_EMAIL@EMAIL.COM with your email
+1. point your dns to your monitoring server
+-----------------
+1. cd ~/injective-node-monitoring
+1. docker compose up -d
+```
 
 ## Setup Grafana
 
-
-
-### Aptos Grafana Dashboard
+### Peggo Grafana Dashboard
 This monitoring solution comes built in with Rhinostake's Aptos Monitoring dashboard, and 
 will require all of its setup to work. Grafana, Prometheus, and Infinity are installed 
 automatically, but setting up the Prometheus jobs is still necessary. 
@@ -52,10 +70,6 @@ docker volume create grafana-storage
 #### 2. Prometheus Jobs
 Add your node endpoints under [/prometheus/prometheus.yaml](https://github.com/LavenderFive/aptos-monitoring/blob/master/prometheus/prometheus.yml#L46). 
 
-#### 3. Checkly Integation (optional)
-1. Uncomment the checkly block under[/prometheus/prometheus.yaml](https://github.com/LavenderFive/aptos-monitoring/blob/master/prometheus/prometheus.yml#L54) 
-2. Follow the steps outlined by [Checkly for Prometheus Integration](https://www.checklyhq.com/docs/integrations/prometheus/)
-
 ---
 
 Navigate to `http://<host-ip>:3000` and login with user ***admin*** password ***admin***. You can change the credentials in the compose file or by supplying the `ADMIN_USER` and `ADMIN_PASSWORD` environment variables on compose up. The config file can be added directly in grafana part like this
@@ -64,7 +78,7 @@ Navigate to `http://<host-ip>:3000` and login with user ***admin*** password ***
 grafana:
   image: grafana/grafana:7.2.0
   env_file:
-    - config
+    - .env
 ```
 
 and the config file format should have this content
@@ -131,19 +145,21 @@ Trigger an alert if any of the monitoring targets (node-exporter and cAdvisor) a
       description: "Service {{ $labels.instance }} is down."
 ```
 
-***Aptos alerts***
+***Peggo alerts***
 
-Trigger an alert if any of the mainnet Aptos nodes fall out of sync for 30 seconds.
+Trigger an alert if Peggo isn't catching up, AND it's more than 5 nonce behind the network
 
 ```yaml
-  - alert: node_not_syncing
-  expr: avg(increase(aptos_state_sync_version{chain="mainnet", type="synced"}[30s])) < 1
-  for: 15s
-  labels:
-    severity: critical
-  annotations:
-    summary: "Aptos Node Not Syncing"
-    description: "Service {{ $labels.job }} {{ $labels.chain }} is not syncing."
+- name: peggo_alerts
+  rules:
+  - alert: HighNonceDifference
+    expr: abs(peggo_network_nonce - peggo_orchestrator_nonce) > 5 and increase(peggo_orchestrator_nonce[1h]) <= 0
+    for: 15m
+    labels:
+      severity: critical
+    annotations:
+      summary: "High difference between peggo_orchestrator_nonce and peggo_network_nonce"
+      description: "The difference between peggo_orchestrator_nonce and peggo_network_nonce has been greater than 5 for more than 15 minutes."
 ```
 
 
