@@ -39,8 +39,12 @@ Containers:
 * Peggo Prometheus Exporter (Peggo monitoring solution)
 
 ## TL;DR: Steps
+This will get you started with a grafana dashboard, but alerting and tenderduty 
+require more setup.
+
 ```
 1. cp .env.sample .env
+2. add your orchestrator address
 
 ----- Peggo -----
 2. rename .env/ORCHESTRATOR_ADDRESS to your orchestrator
@@ -60,6 +64,9 @@ Containers:
 9. cd ~/injective-node-monitoring
 10. docker compose up -d
 ```
+
+![image](https://github.com/LavenderFive/injective-node-monitoring/assets/9121234/82cfc80b-9068-4d33-8c13-75ab1cc87100)
+
 
 ## Setup Grafana
 
