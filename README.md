@@ -41,20 +41,24 @@ Containers:
 ## TL;DR: Steps
 ```
 1. cp .env.sample .env
+
 ----- Peggo -----
-1. rename .env/ORCHESTRATOR_ADDRESS to your orchestrator
-1. under alertmanager/config.yml add your Pagerduty integration/service key
--- IF YOU'RE JUST USING THIS FOR PEGGO, SKIP TO STEP 6! --
+2. rename .env/ORCHESTRATOR_ADDRESS to your orchestrator
+3. under alertmanager/config.yml add your Pagerduty integration/service key
+-- IF YOU'RE JUST USING THIS FOR PEGGO, SKIP TO STEP 9! --
+
 ----- Tenderduty -----
-1. under tenderduty/config.yml add your validator/endpoint information
+4. under tenderduty/config.yml add your validator/endpoint information
+
 ----- Caddy ------
-1. under caddy/Caddyfile:
-1. replace YOUR_WEBSITE.COM with your website
-1. replace YOUR_EMAIL@EMAIL.COM with your email
-1. point your dns to your monitoring server
+5. under caddy/Caddyfile:
+6. replace YOUR_WEBSITE.COM with your website
+7. replace YOUR_EMAIL@EMAIL.COM with your email
+8. point your dns to your monitoring server
+
 -----------------
-1. cd ~/injective-node-monitoring
-1. docker compose up -d
+9. cd ~/injective-node-monitoring
+10. docker compose up -d
 ```
 
 ## Setup Grafana
