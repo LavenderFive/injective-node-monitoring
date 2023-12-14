@@ -185,7 +185,7 @@
           "mappings": [
             {
               "options": {
-                "from": -1,
+                "from": 0,
                 "result": {
                   "index": 0,
                   "text": "0"
@@ -476,7 +476,32 @@
             ]
           }
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "{__name__=\"peggo_network_nonce\", chain=\"injective-1\", instance=\"peggo_exporter:9910\", job=\"peggo\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "network_nonce"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "{__name__=\"peggo_orchestrator_nonce\", chain=\"injective-1\", instance=\"peggo_exporter:9910\", job=\"peggo\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "orchestrator_nonce"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 7,
@@ -563,6 +588,6 @@
   "timezone": "",
   "title": "Peggo Dashboard",
   "uid": "W0E_CfDIk",
-  "version": 5,
+  "version": 6,
   "weekStart": ""
 }
